@@ -25,7 +25,7 @@ def register():
     }
     new_id = User.save(form)
     session['user_id'] = new_id
-    return redirect("/dashboard")
+    return redirect("/")
 
 @app.route('/dashboard')
 def dashboard():
