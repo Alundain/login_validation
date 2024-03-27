@@ -1,5 +1,5 @@
-from flask import render_template, redirect, request, session, flash
-from flask import app
+from flask import Flask, render_template, redirect, request, session, flash
+from flask_app import app
 #importamos todos los modelos
 from flask_app.models.user import User
 # importar contraseña
@@ -8,7 +8,7 @@ bcrypt = Bcrypt(app)
 
 @app.route('/')
 def index():
-    render_template("index.html")
+    return render_template("index.html")
 
 @app.route('/register', methods = ['POST'])
 def register():

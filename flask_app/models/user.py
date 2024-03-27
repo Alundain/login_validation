@@ -10,8 +10,6 @@ class User:
         self.last_name = data['last_name']
         self.email = data['email']
         self.password = data['password']
-        self.created_at = data['created_at']  
-        self.updated_at = data['updated_at']
 
     @classmethod
     def save(cls, data):
@@ -26,44 +24,49 @@ class User:
         is_valid = True
         #validar que el nombre tenga al menos dos caracteres
         if len(data["first_name"]) < 2:
-            flash("Nombre debe tener al menos 2 caracteres")
+            flash("Nombre debe tener al menos 2 caracteres", "register")
+            is_valid = False
         
         if len(data["last_name"]) < 2:
-            flash("Apellido debe tener al menos 2 caracteres")
+            flash("Apellido debe tener al menos 2 caracteres","register")
+            is_valid = False
+
         # que el correo tenga el patron correcto
         if not EMAIL_REGEX.match(data["email"]):
-            flash("Email no válido")
+            flash("Email no válido", "register")
+            is_valid = False
+            
         # validar que el correo sea único
         query = "SELECT * FROM users WHERE email = %(email)s"
         results = connectToMySQL('esquema_loginreg').query_db(query,data)
-        if len(data(results)) >= 1:
+        if len(results) >= 1:
             flash("Email registrado previamente", "register")
             is_valid = False
         
         # validar que la contraseña tengo al menos 6 caracteres
         if len(data["password"]) < 6:
-            flash("El passwor debe tener al menos 6 caracteres", "register")
+            flash("El password debe tener al menos 6 caracteres", "register")
             is_valid = False
 
         if data["password"] != data["confirm"]:
-            flash("password")
+            flash("Las contraseñas no coinciden! ", "register")
             is_valid = False
 
         return is_valid
 
-@classmethod
-def get_by_email(cls, data):
-    query = "SELECT * FROM users WHERE email = %(email)s"
-    results = connectToMySQL('esquema_loginreg').query_db(query,data)
-    if len(results) == 1:
-        user = cls(results[0])
+    @classmethod
+    def get_by_email(cls, data):
+        query = "SELECT * FROM users WHERE email = %(email)s"
+        results = connectToMySQL('esquema_loginreg').query_db(query,data)
+        if len(results) == 1:
+            user = cls(results[0])
+            return user
+        else:
+            return False
+        
+    @classmethod
+    def get_by_id(cls, data):
+        query = "SELECT * FROM users WHERE id = %(id)s"
+        result = connectToMySQL('esquema_loginreg').query_db(query, data)
+        user = cls(result[0])
         return user
-    else:
-        return False
-    
-@classmethod
-def get_by_id(cls, data):
-    query = "SELECT * FROM users WHERE id = %(id)s"
-    result = connectToMySQL('esquema_loginreg').query_db(query, data)
-    user = cls(result[0])
-    return user

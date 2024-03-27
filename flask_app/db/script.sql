@@ -20,7 +20,7 @@ USE `esquema_loginreg` ;
 CREATE TABLE IF NOT EXISTS `esquema_loginreg`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NULL,
-  `last_name` VARCHAR(45) NOT NULL,
+  `last_name` VARCHAR(45) NULL,
   `email` VARCHAR(255) NULL,
   `password` VARCHAR(255) NULL,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
